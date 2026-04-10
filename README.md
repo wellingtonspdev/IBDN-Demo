@@ -167,6 +167,6 @@ No GitHub: **Settings → Pages → Source:** selecione a branch `gh-pages`.
 
 <div align="center">
 
-📌 **Esta é uma versão de demonstração.** Para o projeto completo com backend FastAPI + MySQL, veja o [repositório principal](https://github.com/seu-usuario/IBDN).
+📌 **Esta é uma versão de demonstração.** Para o projeto completo com backend FastAPI + MySQL, veja o [repositório principal](https://github.com/DSM2SEM2025/IBDN.git).
 
 </div># IBDN-Demo
