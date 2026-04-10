@@ -15,13 +15,24 @@ function LoginPage() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError("");
-
     try {
       const data = await authServiceLogin(email, password);
       loginToStore(data.user);
       navigate("/");
     } catch (err) {
       setError("Falha na autenticação. Verifique seu e-mail e senha.");
+      console.error(err);
+    }
+  };
+
+  const handleDemoLogin = async (demoEmail) => {
+    setError("");
+    try {
+      const data = await authServiceLogin(demoEmail, "12345678");
+      loginToStore(data.user);
+      navigate("/");
+    } catch (err) {
+      setError("Falha no acesso rápido. Tente novamente.");
       console.error(err);
     }
   };
@@ -43,8 +54,43 @@ function LoginPage() {
           </p>
         </div>
 
+        {/* Acesso Rápido Demo */}
+        <div className="space-y-3">
+          <p className="text-xs font-semibold text-center text-gray-400 uppercase tracking-widest">
+            ⚡ Acesso Rápido para Demo
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => handleDemoLogin("admin@ibdn.com")}
+              className="flex flex-col items-center gap-1 px-3 py-3 rounded-xl border-2 border-ibdn-primary/30 bg-ibdn-primary/5 hover:bg-ibdn-primary/15 hover:border-ibdn-primary transition-all hover:-translate-y-0.5 text-left"
+            >
+              <span className="text-lg">🛡️</span>
+              <span className="text-xs font-bold text-ibdn-primary">Administrador</span>
+              <span className="text-[10px] text-gray-500 font-mono">admin@ibdn.com</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleDemoLogin("empresa@ibdn.com")}
+              className="flex flex-col items-center gap-1 px-3 py-3 rounded-xl border-2 border-ibdn-accent/30 bg-ibdn-accent/5 hover:bg-ibdn-accent/15 hover:border-ibdn-accent transition-all hover:-translate-y-0.5 text-left"
+            >
+              <span className="text-lg">🏢</span>
+              <span className="text-xs font-bold text-ibdn-accent">Usuário Empresa</span>
+              <span className="text-[10px] text-gray-500 font-mono">empresa@ibdn.com</span>
+            </button>
+          </div>
+        </div>
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-200" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-white/80 px-3 text-gray-400 font-medium">ou entre com suas credenciais</span>
+          </div>
+        </div>
+
         <form className="space-y-6" onSubmit={handleSubmit}>
-          {/* ... campos de email e senha ... */}
           <div>
             <label
               htmlFor="email"
