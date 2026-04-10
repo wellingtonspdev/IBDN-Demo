@@ -199,7 +199,7 @@ function EmpresaForm({ initialData = {}, onSubmit, onCancel, isSaving }) {
               type="checkbox"
               checked={formData.ativo}
               onChange={handleChange}
-              className="h-4 w-4 rounded border-gray-300 text-indigo-600"
+              className="h-4 w-4 rounded border-gray-300 text-ibdn-primary"
             />
             <label htmlFor="ativo" className="ml-2 block text-sm text-gray-900">
               Empresa Ativa
@@ -220,7 +220,7 @@ function EmpresaForm({ initialData = {}, onSubmit, onCancel, isSaving }) {
         <button
           type="submit"
           disabled={isSaving}
-          className="inline-flex justify-center rounded-md border border-transparent bg-green-900 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700"
+          className="inline-flex justify-center rounded-xl border border-transparent bg-ibdn-primary py-2 px-4 text-sm font-medium text-white shadow-sm shadow-ibdn-primary/20 hover:bg-ibdn-primary-focus"
         >
           {isSaving ? "Aguarde..." : "Salvar Empresa"}
         </button>

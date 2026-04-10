@@ -1,12 +1,18 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { Star, Clock, CheckCircle2, AlertCircle } from "lucide-react";
 import * as seloService from "../services/seloService";
 import * as tipoSeloService from "../services/tipoSeloService";
 import Modal from "../components/Modal";
 import SolicitarSeloForm from "../components/SolicitarSeloForm";
 import useAuthStore from "../store/authStore";
 
+const statusColors = {
+  Pendente: "bg-yellow-100 text-yellow-800 border-yellow-200",
+  "Em Renovação": "bg-blue-100 text-blue-800 border-blue-200",
+};
+
 const LoadingSpinner = () => (
-  <div className="flex flex-col justify-center items-center p-20 premium-card bg-white rounded-3xl shadow-sm border border-gray-100 my-8">
+  <div className="flex flex-col justify-center items-center p-20 bg-white rounded-3xl shadow-sm border border-gray-100 my-8">
     <div className="w-12 h-12 border-4 border-ibdn-primary/20 border-t-ibdn-primary rounded-full animate-spin mb-4"></div>
     <p className="text-ibdn-primary font-medium opacity-80">Carregando dados...</p>
   </div>
@@ -22,7 +28,6 @@ function SolicitarSeloPage() {
   const [solicitacoesDaEmpresa, setSolicitacoesDaEmpresa] = useState([]);
 
   const fetchTiposSeloAndSolicitacoes = useCallback(async () => {
-    // Se o usuário não tiver uma empresa associada, não há o que buscar.
     if (!user?.empresa_id) {
       setLoading(false);
       return;
@@ -34,7 +39,6 @@ function SolicitarSeloPage() {
         seloService.getSelosByEmpresa(user.empresa_id),
       ]);
       setTiposSelo(tiposSeloData);
-      // Filtra para exibir apenas as solicitações que estão aguardando alguma ação
       setSolicitacoesDaEmpresa(
         solicitacoesData.filter(
           (s) => s.status === "Pendente" || s.status === "Em Renovação"
@@ -42,9 +46,7 @@ function SolicitarSeloPage() {
       );
       setError(null);
     } catch (err) {
-      setError(
-        "Falha ao carregar dados. Por favor, tente novamente mais tarde."
-      );
+      setError("Falha ao carregar dados. Por favor, tente novamente mais tarde.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -55,25 +57,16 @@ function SolicitarSeloPage() {
     fetchTiposSeloAndSolicitacoes();
   }, [fetchTiposSeloAndSolicitacoes]);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    if (isSaving) return;
-    setIsModalOpen(false);
-  };
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => { if (isSaving) return; setIsModalOpen(false); };
 
   const handleSolicitarSelo = async (dadosSolicitacao) => {
     setIsSaving(true);
     try {
-      // O serviço já espera o objeto completo { id_selo, plano_anos }
       await seloService.solicitarSelo(dadosSolicitacao);
-      alert(
-        "Solicitação de selo enviada com sucesso! Um administrador revisará sua solicitação."
-      );
+      alert("Solicitação de selo enviada com sucesso! Um administrador revisará sua solicitação.");
       handleCloseModal();
-      await fetchTiposSeloAndSolicitacoes(); // Atualiza a lista de solicitações pendentes
+      await fetchTiposSeloAndSolicitacoes();
     } catch (err) {
       const errorMessage =
         err.response?.data?.detail ||
@@ -87,28 +80,25 @@ function SolicitarSeloPage() {
 
   const renderContent = () => {
     if (loading) return <LoadingSpinner />;
+
     if (error)
       return (
-        <div className="text-center p-14 premium-card bg-red-50 rounded-3xl shadow-sm border border-red-100 flex flex-col items-center my-8">
+        <div className="text-center p-14 bg-red-50 rounded-3xl shadow-sm border border-red-100 flex flex-col items-center my-8">
           <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mb-4">
-            <svg className="w-8 h-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+            <AlertCircle className="w-8 h-8 text-red-500" strokeWidth={1.5} />
           </div>
           <h3 className="text-xl font-serif font-bold text-red-800">Erro</h3>
           <p className="mt-2 text-md text-red-600 max-w-sm">{error}</p>
         </div>
       );
 
-    // Exibe uma mensagem se o usuário ainda não tiver cadastrado sua empresa
     if (!user?.empresa_id) {
       return (
         <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded-lg shadow">
           <p className="font-semibold">Atenção:</p>
           <p>
             Você precisa ter uma empresa registrada para solicitar selos. Por
-            favor, complete o cadastro da sua empresa no menu "Registrar
-            Empresa".
+            favor, complete o cadastro da sua empresa no menu "Registrar Empresa".
           </p>
         </div>
       );
@@ -116,63 +106,79 @@ function SolicitarSeloPage() {
 
     return (
       <div className="space-y-6">
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Solicitar Novo Selo
-          </h2>
-          <p className="text-gray-600 mb-4">
+        {/* Card: Solicitar Novo Selo */}
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+          <div className="flex justify-between items-start mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-ibdn-accent/10 flex items-center justify-center">
+                <Star className="w-5 h-5 text-ibdn-accent" strokeWidth={1.5} />
+              </div>
+              <h2 className="text-xl font-serif font-bold text-ibdn-primary">
+                Solicitar Novo Selo
+              </h2>
+            </div>
+            <button
+              onClick={handleOpenModal}
+              className="px-4 py-2 bg-ibdn-primary text-white text-sm font-medium rounded-xl shadow-sm shadow-ibdn-primary/20 hover:bg-ibdn-primary-focus transition-colors disabled:opacity-50"
+              disabled={tiposSelo.length === 0}
+            >
+              Solicitar Agora
+            </button>
+          </div>
+          <p className="text-gray-500 text-sm">
             Selecione um tipo de selo do nosso catálogo para enviar uma
             solicitação de concessão para a sua empresa. Sua solicitação será
             revisada por um administrador.
           </p>
-          <button
-            onClick={handleOpenModal}
-            className="px-4 py-2 bg-green-900 text-white font-semibold rounded-md shadow-sm hover:bg-green-700 disabled:opacity-50"
-            disabled={tiposSelo.length === 0}
-          >
-            Solicitar Selo Agora
-          </button>
           {tiposSelo.length === 0 && (
-            <p className="mt-2 text-sm text-gray-500">
-              Não há tipos de selo disponíveis para solicitação no momento. Por
-              favor, volte mais tarde.
+            <p className="mt-3 text-sm text-gray-400">
+              Não há tipos de selo disponíveis para solicitação no momento.
             </p>
           )}
         </div>
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
-            Minhas Solicitações Pendentes e em Renovação
-          </h2>
+
+        {/* Card: Solicitações Pendentes */}
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-full bg-yellow-50 flex items-center justify-center">
+              <Clock className="w-5 h-5 text-yellow-600" strokeWidth={1.5} />
+            </div>
+            <h2 className="text-xl font-serif font-bold text-ibdn-primary">
+              Minhas Solicitações Pendentes
+            </h2>
+          </div>
+
           {solicitacoesDaEmpresa.length > 0 ? (
-            <ul className="divide-y divide-gray-200">
+            <ul className="divide-y divide-gray-100">
               {solicitacoesDaEmpresa.map((solicitacao) => (
                 <li
                   key={solicitacao.id}
-                  className="py-3 flex justify-between items-center"
+                  className="py-4 flex justify-between items-center"
                 >
                   <div>
-                    <p className="text-sm font-medium text-gray-900">
-                      {solicitacao.nome_selo} (
-                      <span className="font-mono">
-                        {solicitacao.sigla_selo}
-                      </span>
-                      )
-                    </p>
-                    <p className="text-xs text-gray-600">
-                      Status:{" "}
-                      <span className="capitalize font-semibold">
-                        {solicitacao.status}
+                    <p className="text-sm font-semibold text-gray-800">
+                      {solicitacao.nome_selo}{" "}
+                      <span className="font-mono text-gray-500 font-normal">
+                        ({solicitacao.sigla_selo})
                       </span>
                     </p>
                   </div>
+                  <span
+                    className={`px-3 py-1 text-xs font-bold rounded-full border ${
+                      statusColors[solicitacao.status] ||
+                      "bg-gray-100 text-gray-700 border-gray-200"
+                    }`}
+                  >
+                    {solicitacao.status}
+                  </span>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-gray-500">
-              Você não tem solicitações de selo pendentes ou em renovação para a
-              sua empresa.
-            </p>
+            <div className="flex flex-col items-center py-10 text-center text-gray-400">
+              <CheckCircle2 className="w-12 h-12 mb-3 text-gray-200" strokeWidth={1.5} />
+              <p className="text-sm">Nenhuma solicitação pendente ou em renovação.</p>
+            </div>
           )}
         </div>
       </div>
@@ -180,9 +186,16 @@ function SolicitarSeloPage() {
   };
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Solicitar Selo</h1>
+    <div className="animate-fade-in-up space-y-8">
+      <div className="flex justify-between items-end border-b border-gray-200 pb-5">
+        <div>
+          <h1 className="text-3xl font-serif font-bold text-ibdn-primary tracking-tight">
+            Solicitar Selo
+          </h1>
+          <p className="mt-1 text-gray-500">
+            Gerencie suas solicitações de certificação ambiental.
+          </p>
+        </div>
       </div>
 
       {renderContent()}

@@ -181,52 +181,48 @@ function MeuCadastroPage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold text-gray-900">Meu Cadastro</h1>
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <div className="flex justify-between items-center border-b pb-3 mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">
-            Dados da Empresa
-          </h2>
+      {/* Header da página */}
+      <div className="flex justify-between items-end border-b border-gray-200 pb-5">
+        <div>
+          <h1 className="text-3xl font-serif font-bold text-ibdn-primary tracking-tight">Meu Cadastro</h1>
+          <p className="mt-1 text-gray-500">Gerencie os dados da sua empresa e configurações da conta.</p>
+        </div>
+      </div>
+
+      {/* Card: Dados da Empresa */}
+      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+        <div className="flex justify-between items-center border-b border-gray-100 pb-5 mb-6">
+          <h2 className="text-xl font-serif font-bold text-ibdn-primary">Dados da Empresa</h2>
           <button
             onClick={() => handleOpenModal("EMPRESA", empresa)}
-            className="px-4 py-2 text-sm bg-green-900 text-white font-semibold rounded-md shadow-sm hover:bg-green-700"
+            className="px-4 py-2 text-sm bg-ibdn-primary text-white font-medium rounded-xl shadow-sm shadow-ibdn-primary/20 hover:bg-ibdn-primary-focus transition-colors"
           >
             Editar
           </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-          <p>
-            <strong>Razão Social:</strong> {empresa?.razao_social}
-          </p>
-          <p>
-            <strong>Nome Fantasia:</strong> {empresa?.nome_fantasia || "N/A"}
-          </p>
-          <p>
-            <strong>CNPJ:</strong> {empresa?.cnpj}
-          </p>
-          <p>
-            <strong>Responsável:</strong> {empresa?.responsavel || "N/A"}
-          </p>
-          <p>
-            <strong>Telefone:</strong> {empresa?.telefone || "N/A"}
-          </p>
-          <p>
-            <strong>Site:</strong> {empresa?.site || "N/A"}
-          </p>
+          <p><strong>Razão Social:</strong> {empresa?.razao_social}</p>
+          <p><strong>Nome Fantasia:</strong> {empresa?.nome_fantasia || "N/A"}</p>
+          <p><strong>CNPJ:</strong> {empresa?.cnpj}</p>
+          <p><strong>Responsável:</strong> {empresa?.responsavel || "N/A"}</p>
+          <p><strong>Telefone:</strong> {empresa?.telefone || "N/A"}</p>
+          <p><strong>Site:</strong> {empresa?.site || "N/A"}</p>
         </div>
       </div>
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <div className="flex justify-between items-center border-b pb-3 mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">Endereço</h2>
+
+      {/* Card: Endereço */}
+      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+        <div className="flex justify-between items-center border-b border-gray-100 pb-5 mb-6">
+          <h2 className="text-xl font-serif font-bold text-ibdn-primary">Endereço</h2>
           <button
             onClick={() => handleOpenModal("ENDERECO", endereco)}
-            className="px-4 py-2 text-sm bg-green-900 text-white font-semibold rounded-md shadow-sm hover:bg-green-700"
+            className="px-4 py-2 text-sm bg-ibdn-primary text-white font-medium rounded-xl shadow-sm shadow-ibdn-primary/20 hover:bg-ibdn-primary-focus transition-colors"
           >
             {endereco ? "Editar" : "Adicionar"}
           </button>
         </div>
         {endereco ? (
-          <div className="text-sm">
+          <div className="text-sm text-gray-700 space-y-1">
             <p>{`${endereco.logradouro}, ${endereco.numero} - ${endereco.bairro}`}</p>
             <p>{`${endereco.cidade} - ${endereco.uf}, CEP: ${endereco.cep}`}</p>
             {endereco.complemento && <p>Complemento: {endereco.complemento}</p>}
@@ -235,14 +231,14 @@ function MeuCadastroPage() {
           <p className="text-sm text-gray-500">Nenhum endereço cadastrado.</p>
         )}
       </div>
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <div className="flex justify-between items-center border-b pb-3 mb-4">
-          <h2 className="text-xl font-semibold text-gray-800">
-            Ramos de Atividade
-          </h2>
+
+      {/* Card: Ramos de Atividade */}
+      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+        <div className="flex justify-between items-center border-b border-gray-100 pb-5 mb-6">
+          <h2 className="text-xl font-serif font-bold text-ibdn-primary">Ramos de Atividade</h2>
           <button
             onClick={() => handleOpenModal("RAMOS")}
-            className="px-4 py-2 text-sm bg-green-900 text-white font-semibold rounded-md shadow-sm hover:bg-green-700"
+            className="px-4 py-2 text-sm bg-ibdn-primary text-white font-medium rounded-xl shadow-sm shadow-ibdn-primary/20 hover:bg-ibdn-primary-focus transition-colors"
           >
             Gerenciar
           </button>
@@ -252,28 +248,30 @@ function MeuCadastroPage() {
             {ramosAtuais.map((ramo) => (
               <span
                 key={ramo.id}
-                className="bg-gray-200 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full"
+                className="bg-ibdn-primary/10 text-ibdn-primary text-xs font-semibold px-3 py-1 rounded-full"
               >
                 {ramo.nome}
               </span>
             ))}
           </div>
         ) : (
-          <p className="text-sm text-gray-500">
-            Nenhum ramo de atividade associado.
-          </p>
+          <p className="text-sm text-gray-500">Nenhum ramo de atividade associado.</p>
         )}
       </div>
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold text-gray-800 border-b pb-3 mb-4">
-          Meus Selos
-        </h2>
+
+      {/* Card: Meus Selos */}
+      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+        <div className="border-b border-gray-100 pb-5 mb-6">
+          <h2 className="text-xl font-serif font-bold text-ibdn-primary">Meus Selos</h2>
+        </div>
         <SelosAssociadosTable selos={selos} />
       </div>
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold text-gray-800 border-b pb-3 mb-4">
-          Minhas Notificações
-        </h2>
+
+      {/* Card: Minhas Notificações */}
+      <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8">
+        <div className="border-b border-gray-100 pb-5 mb-6">
+          <h2 className="text-xl font-serif font-bold text-ibdn-primary">Minhas Notificações</h2>
+        </div>
         <NotificacoesList
           notificacoes={notificacoes}
           onMarkAsRead={handleMarkAsRead}
@@ -329,3 +327,4 @@ function MeuCadastroPage() {
 }
 
 export default MeuCadastroPage;
+
