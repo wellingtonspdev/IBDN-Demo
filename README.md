@@ -17,7 +17,7 @@
 
 ## ✨ O que é isso?
 
-Esta é uma **versão de demonstração standalone** da [plataforma IBDN](https://github.com/seu-usuario/IBDN). Todas as telas e funcionalidades do sistema estão presentes e navegáveis, mas sem dependência de backend ou banco de dados.
+Esta é uma **versão de demonstração standalone** da [plataforma IBDN](https://github.com/DSM2SEM2025/IBDN.git). Todas as telas e funcionalidades do sistema estão presentes e navegáveis, mas sem dependência de backend ou banco de dados.
 
 ### Como funciona?
 
@@ -118,41 +118,6 @@ ibdn-demo/
 
 - **`mockData.js`** — Fonte de dados: 3 empresas, 5 ramos, 4 tipos de selo, 5 selos, 4 usuários, 2 perfis, 6 permissões, 4 notificações
 - **`mockStore.js`** — Store in-memory com CRUD genérico e delay simulado (200ms)
-
----
-
-## 🌐 Deploy no GitHub Pages
-
-### 1. Crie o repositório
-
-Crie um repositório chamado `ibdn-demo` no GitHub.
-
-### 2. Ajuste o base path (se necessário)
-
-No `vite.config.js`, o `base` já está configurado como `/ibdn-demo/`. Se o nome do seu repositório for diferente, altere:
-
-```js
-base: '/nome-do-seu-repo/',
-```
-
-### 3. Build e deploy
-
-```bash
-# Build
-npm run build
-
-# Instalar gh-pages (única vez)
-npm install -D gh-pages
-
-# Deploy
-npx gh-pages -d dist
-```
-
-### 4. Ativação
-
-No GitHub: **Settings → Pages → Source:** selecione a branch `gh-pages`.
-
-✅ Seu demo estará disponível em: `https://seu-usuario.github.io/ibdn-demo/`
 
 ---
 
